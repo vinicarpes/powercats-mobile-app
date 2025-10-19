@@ -1,1 +1,56 @@
-/build
+# === Build / Output ===
+/build/
+/*/build/
+*/bin/
+/out/
+
+# === Gradle ===
+.gradle/
+/gradle/
+/gradle-wrapper.jar
+gradle-wrapper.properties
+
+# === Local configuration files ===
+local.properties
+
+# === IDE / Android Studio ===
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/migrations.xml
+.idea/runConfigurations.xml
+.idea/vcs.xml
+.idea/caches/
+.idea/libraries/
+.idea/navEditor/
+.idea/assetWizardSettings.xml
+
+# Keep these so project structure and code styles are shared
+!.idea/codeStyles/
+!.idea/misc.xml
+!.idea/modules.xml
+!.idea/inspectionProfiles/
+
+# === Mac / Linux OS files ===
+.DS_Store
+*.swp
+*~ 
+
+# === Kotlin / IntelliJ caches ===
+*.iml
+*.hprof
+
+# === Logs / Temporary files ===
+*.log
+*.tmp
+*.temp
+
+# === NDK / CMake / External builds ===
+.externalNativeBuild
+.cxx/
+*.so
+
+# === Others ===
+captures/
+output.json
+*.orig
