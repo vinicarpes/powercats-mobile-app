@@ -1,5 +1,7 @@
 package com.example.powercats.ui.activities
 
+import AlertListingViewModel
+import AlertsState
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -35,8 +38,11 @@ import androidx.compose.ui.unit.dp
 import com.example.powercats.ui.components.TopBar
 import com.example.powercats.ui.model.AlertUi
 import com.example.powercats.ui.theme.PowerCATSTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AlertListingComposeActivity : ComponentActivity() {
+    private val viewModel: AlertListingViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -45,9 +51,34 @@ class AlertListingComposeActivity : ComponentActivity() {
                     topBar = { TopBar() },
                     modifier = Modifier.fillMaxSize(),
                 ) { innerPadding ->
-                    AlertList(modifier = Modifier.padding(innerPadding), alerts = sampleAlerts())
+                    AlertScreen(modifier = Modifier.padding(innerPadding), viewModel = viewModel)
                 }
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+}
+
+@Composable
+fun AlertScreen(
+    viewModel: AlertListingViewModel,
+    modifier: Modifier,
+) {
+    val state = viewModel.state.collectAsState()
+    when (val currentState = state.value) {
+        is AlertsState.Loading -> {
+            Text("Carregando...")
+        }
+
+        is AlertsState.Success -> {
+            AlertList(alerts = currentState.alerts, modifier = modifier)
+        }
+
+        is AlertsState.Error -> {
+            Text("Erro: ${currentState.message}")
         }
     }
 }
