@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -68,17 +69,36 @@ fun AlertScreen(
     modifier: Modifier,
 ) {
     val state = viewModel.state.collectAsState()
-    when (val currentState = state.value) {
-        is AlertsState.Loading -> {
-            Text("Carregando...")
+
+    Box(modifier = modifier.fillMaxSize()) {
+        val alerts = (state.value as? AlertsState.Success)?.alerts ?: emptyList()
+        AlertList(alerts = alerts, modifier = Modifier.fillMaxSize())
+
+        if (state.value is AlertsState.Loading) {
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator(color = Color.White)
+            }
         }
 
-        is AlertsState.Success -> {
-            AlertList(alerts = currentState.alerts, modifier = modifier)
-        }
-
-        is AlertsState.Error -> {
-            Text("Erro: ${currentState.message}")
+        if (state.value is AlertsState.Error) {
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = "Erro: ${(state.value as AlertsState.Error).message}",
+                    color = Color.White,
+                )
+            }
         }
     }
 }
@@ -159,10 +179,11 @@ fun AlertItem(
 @Composable
 fun AlertStatusTag(status: String) {
     val (bgColor, textColor) =
-        when (status.lowercase()) {
-            "ativo" -> Color(0xFFE8F5E9) to Color(0xFF2E7D32)
-            "resolvido" -> Color(0xFFE3F2FD) to Color(0xFF1565C0)
-            "pendente" -> Color(0xFFFFF3E0) to Color(0xFFEF6C00)
+        when (status) {
+            "Ativo" -> Color(0xFFE8F5E9) to Color(0xFF2E7D32)
+            "Resolvido" -> Color(0xFFE3F2FD) to Color(0xFF1565C0)
+            "Pendente" -> Color(0xFFFFF3E0) to Color(0xFFEF6C00)
+            "Cancelado" -> Color(0xFFFFE5E5) to Color(0xFFD32F2F)
             else -> Color(0xFFF5F5F5) to Color(0xFF757575)
         }
 
@@ -189,11 +210,11 @@ private fun AlertLevelTag(
     modifier: Modifier = Modifier,
 ) {
     val (bgColor, textColor) =
-        when (title.lowercase()) {
-            "crítico", "critico" -> Color(0xFFF5E9EC) to Color(0xFFCC3750)
-            "alto" -> Color(0xFFF5EFE9) to Color(0xFFE8891C)
-            "médio", "medio" -> Color(0xFFE1F5EC) to Color(0xFF03AB4F)
-            "baixo" -> Color(0xFFEBEBFC) to Color(0xFF6363DB)
+        when (title) {
+            "Crítico" -> Color(0xFFF5E9EC) to Color(0xFFCC3750)
+            "Alto" -> Color(0xFFF5EFE9) to Color(0xFFE8891C)
+            "Médio" -> Color(0xFFE1F5EC) to Color(0xFF03AB4F)
+            "Baixo" -> Color(0xFFEBEBFC) to Color(0xFF6363DB)
             else -> MaterialTheme.colorScheme.primaryContainer to MaterialTheme.colorScheme.onPrimaryContainer
         }
 
