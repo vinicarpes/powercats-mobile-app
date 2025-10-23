@@ -160,10 +160,10 @@ fun AlertItem(
 fun AlertStatusTag(status: String) {
     val (bgColor, textColor) =
         when (status.lowercase()) {
-            "ativo" -> Color(0xFFE8F5E9) to Color(0xFF2E7D32) // verde suave
-            "resolvido" -> Color(0xFFE3F2FD) to Color(0xFF1565C0) // azul claro
-            "pendente" -> Color(0xFFFFF3E0) to Color(0xFFEF6C00) // laranja
-            else -> Color(0xFFF5F5F5) to Color(0xFF757575) // neutro
+            "ativo" -> Color(0xFFE8F5E9) to Color(0xFF2E7D32)
+            "resolvido" -> Color(0xFFE3F2FD) to Color(0xFF1565C0)
+            "pendente" -> Color(0xFFFFF3E0) to Color(0xFFEF6C00)
+            else -> Color(0xFFF5F5F5) to Color(0xFF757575)
         }
 
     Box(
