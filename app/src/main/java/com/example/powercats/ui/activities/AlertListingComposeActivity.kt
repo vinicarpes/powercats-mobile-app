@@ -96,17 +96,6 @@ fun AlertItem(
     alertUi: AlertUi,
     modifier: Modifier = Modifier,
 ) {
-    val backgroundColor by animateColorAsState(
-        when (alertUi.alertLevel.lowercase()) {
-            "crítico", "critico" -> MaterialTheme.colorScheme.errorContainer
-            "alto" -> Color.White
-            "médio", "medio" -> Color(0xFFFFF59D)
-            "baixo" -> Color(0xFFC8E6C9)
-            else -> MaterialTheme.colorScheme.surface
-        },
-        label = "Alert color",
-    )
-
     Card(
         modifier =
             modifier
@@ -146,9 +135,42 @@ fun AlertItem(
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            // Tag de nível
-            AlertLevelTag(title = alertUi.alertLevel)
+            // 🔖 Container das tags (nível + status)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                AlertLevelTag(title = alertUi.alertLevel)
+                AlertStatusTag(status = alertUi.status)
+            }
         }
+    }
+}
+
+@Composable
+fun AlertStatusTag(status: String) {
+    val (bgColor, textColor) =
+        when (status.lowercase()) {
+            "ativo" -> Color(0xFFE8F5E9) to Color(0xFF2E7D32) // verde suave
+            "resolvido" -> Color(0xFFE3F2FD) to Color(0xFF1565C0) // azul claro
+            "pendente" -> Color(0xFFFFF3E0) to Color(0xFFEF6C00) // laranja
+            else -> Color(0xFFF5F5F5) to Color(0xFF757575) // neutro
+        }
+
+    Box(
+        modifier =
+            Modifier
+                .background(bgColor, shape = RoundedCornerShape(8.dp))
+                .padding(horizontal = 10.dp, vertical = 4.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = status,
+            color = textColor,
+            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Medium),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
@@ -204,6 +226,7 @@ private fun AlertItemPreview() {
                 longitude = "",
                 dateTime = "23/10/2025 14:04",
                 alertLevel = "Crítico",
+                status = "ativo",
             ),
     )
 }
@@ -232,6 +255,7 @@ private fun sampleAlerts() =
             longitude = "",
             dateTime = "23/10/2025 14:04",
             alertLevel = "Crítico",
+            status = "Ativo",
         ),
         AlertUi(
             location = "Rua das Flores, 50 - Curitiba",
@@ -239,6 +263,7 @@ private fun sampleAlerts() =
             longitude = "-49.27",
             dateTime = "23/10/2025 10:30",
             alertLevel = "Alto",
+            status = "Pendente",
         ),
         AlertUi(
             location = "Av. Paulista, 1000 - São Paulo",
@@ -246,6 +271,7 @@ private fun sampleAlerts() =
             longitude = "-46.64",
             dateTime = "23/10/2025 12:10",
             alertLevel = "Médio",
+            status = "Resolvido",
         ),
         AlertUi(
             location = "Rua das Flores, 50 - Curitiba",
@@ -253,5 +279,6 @@ private fun sampleAlerts() =
             longitude = "-49.27",
             dateTime = "23/10/2025 10:30",
             alertLevel = "Baixo",
+            status = "Cancelado",
         ),
     )

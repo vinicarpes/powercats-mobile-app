@@ -5,5 +5,6 @@ data class AlertUi(
     val latitude: String,
     val longitude: String,
     val dateTime: String,
-    val alertLevel: String
+    val alertLevel: String,
+    val status: String
 )
