@@ -1,10 +1,8 @@
 package com.example.powercats.ui.components
 
-import android.media.Image
-import android.widget.ImageView
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -23,85 +21,106 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.powercats.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar() {
+fun TopBar(
+    userName: String = "Vinicius",
+    modifier: Modifier = Modifier,
+) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     CenterAlignedTopAppBar(
-
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(120.dp)
-        ,
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Color(0xFFFF941A),
-            titleContentColor = Color.White
-        ),
-        title = { TopBarTitle() },
-        scrollBehavior = scrollBehavior
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(120.dp)
+                .background(
+                    brush =
+                        Brush.verticalGradient(
+                            colors =
+                                listOf(
+                                    Color(0xFFFFA726), // Laranja mais claro no topo
+                                    Color(0xFFFF8F00), // Laranja mais forte embaixo
+                                ),
+                        ),
+                ),
+        colors =
+            TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = Color.Transparent,
+                titleContentColor = Color.White,
+            ),
+        title = {
+            TopBarContent(userName = userName)
+        },
+        scrollBehavior = scrollBehavior,
     )
 }
 
 @Composable
-private fun TopBarTitle(
-    modifier: Modifier = Modifier
-) {
+private fun TopBarContent(userName: String) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(horizontal = 12.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
+        // Lado esquerdo: texto de boas-vindas
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start,
-            modifier = Modifier.padding(end = 12.dp)
+            modifier = Modifier.weight(1f),
         ) {
             Text(
-                text = "Olá, Vinicius",
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontSize = 22.sp,
-                    color = Color.White
-                ),
+                text = "Olá, $userName 👋",
+                style =
+                    MaterialTheme.typography.titleLarge.copy(
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                    ),
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = "Acompanhe as notificações dos dispositivos",
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    fontSize = 14.sp,
-                    color = Color.White.copy(alpha = 0.9f)
-                ),
+                style =
+                    MaterialTheme.typography.bodyMedium.copy(
+                        fontSize = 14.sp,
+                        color = Color.White.copy(alpha = 0.9f),
+                    ),
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         }
 
+        // Lado direito: logo / ícone
         Icon(
-            painter = painterResource(id = android.R.drawable.ic_menu_camera),
-            contentDescription = "Logo PowerCats",
+            painter = painterResource(id = R.drawable.ic_launcher_foreground), // substitua pelo logo real
+            contentDescription = "Logo PowerCATS",
             tint = Color.White,
-            modifier = Modifier
-                .size(60.dp)
-                .padding(end = 12.dp)
+            modifier =
+                Modifier
+                    .size(64.dp)
+                    .padding(start = 12.dp),
         )
     }
 }
 
-
-
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun TopBarPreview() {
     Scaffold {

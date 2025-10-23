@@ -1,5 +1,6 @@
 package com.example.powercats.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +33,8 @@ import com.example.powercats.R.drawable.notifications
 import com.example.powercats.R.drawable.sensors_register
 import com.example.powercats.R.drawable.user_register
 import com.example.powercats.ui.components.TopBar
+import com.example.powercats.ui.navigation.Destination
+import com.example.powercats.ui.navigation.navigateTo
 import com.example.powercats.ui.theme.PowerCATSTheme
 
 class HomeComposeActivity : ComponentActivity() {
@@ -51,10 +55,13 @@ class HomeComposeActivity : ComponentActivity() {
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+
     val rowModifier =
         Modifier
             .fillMaxWidth()
             .padding(top = 16.dp)
+
     Column(
         modifier =
             modifier
@@ -65,23 +72,45 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             modifier = rowModifier,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            OptionCard(text = "Notificações e Alertas")
+            OptionCard(
+                text = "Notificações e Alertas",
+                painter = painterResource(notifications),
+                onClick = { navigateTo(context, Destination.Alerts) },
+            )
 
-            OptionCard(text = "Cadastro de Sensores", painter = painterResource(sensors_register))
+            OptionCard(
+                text = "Cadastro de Sensores",
+                painter = painterResource(sensors_register),
+                onClick = { navigateTo(context, Destination.Sensors) },
+            )
         }
+
         Row(
             modifier = rowModifier,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            OptionCard(text = "Mapa Geolocalização", painter = painterResource(device_map))
+            OptionCard(
+                text = "Mapa Geolocalização",
+                painter = painterResource(device_map),
+                onClick = { navigateTo(context, Destination.Map) },
+            )
 
-            OptionCard(text = "Cadastro de Usuários", painter = painterResource(user_register))
+            OptionCard(
+                text = "Cadastro de Usuários",
+                painter = painterResource(user_register),
+                onClick = { navigateTo(context, Destination.Users) },
+            )
         }
+
         Row(
             modifier = rowModifier,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            OptionCard(text = "Relatório de Alertas", painter = painterResource(sensors_register))
+            OptionCard(
+                text = "Relatório de Alertas",
+                painter = painterResource(sensors_register),
+                onClick = { navigateTo(context, Destination.Reports) },
+            )
         }
     }
 }
@@ -91,6 +120,7 @@ private fun OptionCard(
     modifier: Modifier = Modifier,
     text: String,
     painter: Painter = painterResource(notifications),
+    onClick: () -> Unit = {},
 ) {
     Column(
         modifier =
@@ -98,7 +128,7 @@ private fun OptionCard(
                 .width(150.dp)
                 .height(150.dp)
                 .border(1.dp, Color(0xFFE1E1E5), shape = RoundedCornerShape(10.dp))
-                .clickable(enabled = true, onClick = {}),
+                .clickable(onClick = onClick),
     ) {
         Icon(
             painter = painter,
