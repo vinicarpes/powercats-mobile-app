@@ -1,5 +1,7 @@
 package com.example.powercats.ui.activities
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
 import com.example.powercats.R.drawable.device_map
 import com.example.powercats.R.drawable.notifications
 import com.example.powercats.R.drawable.sensors_register
@@ -48,6 +51,13 @@ class HomeComposeActivity : ComponentActivity() {
                     HomeScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                1,
+            )
         }
     }
 }

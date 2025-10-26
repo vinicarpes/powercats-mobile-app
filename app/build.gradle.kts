@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -47,6 +48,8 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     implementation(libs.koin.androidx.navigation)
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.inappmessaging.display)
     testImplementation(libs.koin.test)
     testImplementation(libs.koin.test.junit4)
     implementation(libs.androidx.core.ktx)
@@ -69,4 +72,6 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
 }
