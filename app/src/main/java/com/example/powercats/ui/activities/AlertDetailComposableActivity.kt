@@ -127,42 +127,6 @@ private fun AlertDetails(
     }
 }
 
-//@Composable
-//fun AlertLocationMap(
-//    latitude: String,
-//    longitude: String,
-//) {
-//    val lat = latitude.toDoubleOrNull() ?: 27.5969
-//    val lon = longitude.toDoubleOrNull() ?: 48.5494
-//    val positionState =
-//        rememberCameraPositionState {
-//            position = CameraPosition.fromLatLngZoom(LatLng(lat, lon), 15f)
-//        }
-//
-//    val properties =
-//        MapProperties(
-//            mapType = MapType.NORMAL,
-//            isMyLocationEnabled = true,
-//        )
-//
-//    val uiSettings =
-//        MapUiSettings(
-//            zoomControlsEnabled = true,
-//            myLocationButtonEnabled = false,
-//        )
-//
-//    GoogleMap(
-//        modifier =
-//            Modifier
-//                .fillMaxWidth()
-//                .height(200.dp)
-//                .clip(RoundedCornerShape(12.dp)),
-//        cameraPositionState = positionState,
-//        properties = properties,
-//        uiSettings = uiSettings,
-//    )
-//}
-
 @Preview(showBackground = true)
 @Composable
 private fun AlertDetailScreenPreview() {

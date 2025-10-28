@@ -23,10 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.example.powercats.ui.theme.PowerCATSTheme
 import com.example.powercats.ui.theme.md_theme_dark_primary
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -71,17 +68,23 @@ fun AlertLocationMap(
 
     val positionState =
         rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(alertLatLng, 15f)
+            position = CameraPosition.fromLatLngZoom(alertLatLng, 14f)
         }
 
     val properties =
         MapProperties(
-            mapType = MapType.SATELLITE,
+            mapType = MapType.NORMAL,
             isMyLocationEnabled = hasLocationPermission,
+            minZoomPreference = 1f,
+            maxZoomPreference = 20f,
         )
     val uiSettings =
         MapUiSettings(
             zoomControlsEnabled = true,
+            compassEnabled = true,
+            scrollGesturesEnabled = true,
+            zoomGesturesEnabled = true,
+            tiltGesturesEnabled = true,
             myLocationButtonEnabled = hasLocationPermission,
         )
 
