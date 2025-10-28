@@ -123,7 +123,8 @@ private fun TopBarContent(userName: String) {
 @Preview(showBackground = true)
 @Composable
 private fun TopBarPreview() {
-    Scaffold {
+    Scaffold { innerpaddind ->
+        val i = innerpaddind
         TopBar()
     }
 }

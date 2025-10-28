@@ -19,6 +19,17 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val mapsApiKey: String =
+            (project.findProperty("MAPS_API_KEY") as? String)
+                ?: System.getenv("MAPS_API_KEY")
+                ?: ""
+
+        if (mapsApiKey.isEmpty()) {
+            logger.warn("⚠️ MAPS_API_KEY está vazia. Verifique local.properties ou variáveis de ambiente.")
+        }
+
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
     buildTypes {
@@ -50,8 +61,9 @@ dependencies {
     implementation(libs.koin.androidx.navigation)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.inappmessaging.display)
-    testImplementation(libs.koin.test)
-    testImplementation(libs.koin.test.junit4)
+    implementation(libs.play.services.location)
+//    testImplementation(libs.koin.test)
+//    testImplementation(libs.koin.test.junit4)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -61,11 +73,11 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.appcompat)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+//    testImplementation(libs.junit)
+//    androidTestImplementation(libs.androidx.junit)
+//    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+//    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(libs.retrofit)
@@ -74,4 +86,6 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    implementation(libs.maps.compose.v430)
+    implementation(libs.play.services.maps)
 }

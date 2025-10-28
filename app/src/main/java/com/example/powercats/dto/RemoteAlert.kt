@@ -1,6 +1,9 @@
 package com.example.powercats.dto
 
 import com.example.powercats.ui.model.AlertUi
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 data class RemoteAlert(
     val id: Long?,
@@ -12,12 +15,13 @@ data class RemoteAlert(
 
 fun RemoteAlert.toAlertUi(): AlertUi =
     AlertUi(
-        location = description,
+        location = "",
         latitude = "",
         longitude = "",
-        dateTime = alertDate,
+        dateTime = mapAlertDate(alertDate),
         alertLevel = mapAlertLevel(alertLevel),
         status = mapStatusAlert(statusAlert),
+        description = description,
     )
 
 private fun mapAlertLevel(level: String): String =
@@ -37,3 +41,10 @@ private fun mapStatusAlert(status: String): String =
         "FULFILLED" -> "Resolvido"
         else -> status
     }
+
+private fun mapAlertDate(alertDate: String): String {
+    val zoned = ZonedDateTime.parse(alertDate)
+    return zoned
+        .withZoneSameInstant(ZoneId.of("America/Sao_Paulo"))
+        .format(DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"))
+}

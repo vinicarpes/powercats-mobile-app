@@ -13,7 +13,7 @@ class AlertUseCase(
         withContext(Dispatchers.IO) {
             runCatching {
                 repository
-                    .buscarDados()
+                    .getData()
                     .mapNotNull { it?.toAlertUi() }
             }
         }
