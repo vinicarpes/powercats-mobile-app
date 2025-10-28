@@ -194,8 +194,8 @@ private fun AlertItemPreview() {
         alertUi =
             AlertUi(
                 location = "Rua Mauro Ramos, 500 - Florianópolis",
-                latitude = "-26.00",
-                longitude = "",
+                latitude = -26.00,
+                longitude = 40.00,
                 dateTime = "23/10/2025 14:04",
                 alertLevel = "Crítico",
                 status = "ativo",
@@ -224,8 +224,8 @@ private fun sampleAlerts() =
     listOf(
         AlertUi(
             location = "Rua Mauro Ramos, 500 - Florianópolis",
-            latitude = "-26.00",
-            longitude = "",
+            latitude = -26.00,
+            longitude = 40.00,
             dateTime = "23/10/2025 14:04",
             alertLevel = "Crítico",
             status = "Ativo",
@@ -233,8 +233,8 @@ private fun sampleAlerts() =
         ),
         AlertUi(
             location = "Rua das Flores, 50 - Curitiba",
-            latitude = "-25.43",
-            longitude = "-49.27",
+            latitude = -26.00,
+            longitude = 40.00,
             dateTime = "23/10/2025 10:30",
             alertLevel = "Alto",
             status = "Pendente",
@@ -242,8 +242,8 @@ private fun sampleAlerts() =
         ),
         AlertUi(
             location = "Av. Paulista, 1000 - São Paulo",
-            latitude = "-23.56",
-            longitude = "-46.64",
+            latitude = -26.00,
+            longitude = 40.00,
             dateTime = "23/10/2025 12:10",
             alertLevel = "Médio",
             status = "Resolvido",
@@ -251,8 +251,8 @@ private fun sampleAlerts() =
         ),
         AlertUi(
             location = "Rua das Flores, 50 - Curitiba",
-            latitude = "-25.43",
-            longitude = "-49.27",
+            latitude = -26.00,
+            longitude = 40.00,
             dateTime = "23/10/2025 10:30",
             alertLevel = "Baixo",
             status = "Cancelado",

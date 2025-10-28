@@ -4,9 +4,13 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -15,9 +19,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import com.example.powercats.ui.theme.PowerCATSTheme
+import com.example.powercats.ui.theme.md_theme_dark_primary
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
@@ -32,12 +39,12 @@ import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
 fun AlertLocationMap(
-    latitude: String,
-    longitude: String,
+    latitude: Double,
+    longitude: Double,
 ) {
     val context = LocalContext.current
-    val lat = latitude.toDoubleOrNull() ?: -27.5969
-    val lon = longitude.toDoubleOrNull() ?: -48.5494
+    val lat = latitude
+    val lon = longitude
     val alertLatLng = LatLng(lat, lon)
 
     var hasLocationPermission by remember {
@@ -69,7 +76,7 @@ fun AlertLocationMap(
 
     val properties =
         MapProperties(
-            mapType = MapType.NORMAL,
+            mapType = MapType.SATELLITE,
             isMyLocationEnabled = hasLocationPermission,
         )
     val uiSettings =
@@ -78,20 +85,29 @@ fun AlertLocationMap(
             myLocationButtonEnabled = hasLocationPermission,
         )
 
-    GoogleMap(
+    Card(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .height(200.dp)
-                .clip(RoundedCornerShape(12.dp)),
-        cameraPositionState = positionState,
-        properties = properties,
-        uiSettings = uiSettings,
+                .height(400.dp),
+        shape = RoundedCornerShape(12.dp),
+        border = BorderStroke(1.dp, md_theme_dark_primary),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
     ) {
-        Marker(
-            state = MarkerState(position = alertLatLng),
-            title = "Alerta",
-            snippet = "Local do alerta",
-        )
+        GoogleMap(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(12.dp)),
+            cameraPositionState = positionState,
+            properties = properties,
+            uiSettings = uiSettings,
+        ) {
+            Marker(
+                state = MarkerState(position = alertLatLng),
+                title = "Alerta",
+                snippet = "Local do alerta",
+            )
+        }
     }
 }
