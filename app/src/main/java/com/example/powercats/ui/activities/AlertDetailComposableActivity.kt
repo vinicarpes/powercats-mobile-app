@@ -11,11 +11,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +29,8 @@ import androidx.compose.ui.unit.sp
 import com.example.powercats.ui.components.AlertLevelTag
 import com.example.powercats.ui.components.AlertLocationMap
 import com.example.powercats.ui.components.AlertStatusTag
+import com.example.powercats.ui.components.ButtonComponent
+import com.example.powercats.ui.components.ResolveAlertBottomSheet
 import com.example.powercats.ui.components.TopBar
 import com.example.powercats.ui.model.AlertUi
 import com.example.powercats.ui.theme.PowerCATSTheme
@@ -54,6 +60,7 @@ private fun AlertDetailScreen(
     modifier: Modifier = Modifier,
     alertUi: AlertUi,
 ) {
+    var showBottomSheet by remember { mutableStateOf(false) }
     Column(
         modifier =
             modifier
@@ -67,6 +74,24 @@ private fun AlertDetailScreen(
         AlertLocationMap(
             latitude = alertUi.latitude,
             longitude = alertUi.longitude,
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            ButtonComponent(text = "Cancelar", isPrimaryButton = false, onClick = {})
+            ButtonComponent(text = "Resolver", onClick = {
+                showBottomSheet = true
+            })
+        }
+    }
+    if (showBottomSheet) {
+        ResolveAlertBottomSheet(
+            visible = showBottomSheet,
+            onDismissRequest = { showBottomSheet = false },
+            onConfirmation = {
+                showBottomSheet = false
+            },
+            sheetTitle = "Resolver alerta?",
+            sheetText = "Tem certeza que deseja resolver este alerta?",
+            onCancelAlert = {},
         )
     }
 }
@@ -92,7 +117,7 @@ private fun AlertDetailHeader(
             )
             AlertLevelTag(level = level)
         }
-        Divider(
+        HorizontalDivider(
             thickness = 1.dp,
             modifier =
                 Modifier
