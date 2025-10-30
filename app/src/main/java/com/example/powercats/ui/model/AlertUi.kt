@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable as KxSerializable
 
 @KxSerializable
 data class AlertUi(
+    val id: Long,
     val location: String,
     val latitude: Double,
     val longitude: Double,

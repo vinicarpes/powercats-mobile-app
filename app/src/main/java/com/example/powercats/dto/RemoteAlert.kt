@@ -12,7 +12,7 @@ data class RemoteAlert(
     val statusAlert: String,
     val description: String,
     val latitude: Double = 0.0,
-    val longitude: Double = 0.0
+    val longitude: Double = 0.0,
 )
 
 fun RemoteAlert.toAlertUi(): AlertUi =
@@ -24,6 +24,7 @@ fun RemoteAlert.toAlertUi(): AlertUi =
         alertLevel = mapAlertLevel(alertLevel),
         status = mapStatusAlert(statusAlert),
         description = description,
+        id = id ?: 0,
     )
 
 private fun mapAlertLevel(level: String): String =

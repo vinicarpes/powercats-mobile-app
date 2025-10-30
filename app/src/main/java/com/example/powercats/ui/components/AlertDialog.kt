@@ -92,7 +92,7 @@ fun ResolveAlertBottomSheet(
                         },
                         modifier = Modifier.weight(1f),
                     ) {
-                        Text("Confirmar", fontSize = 18.sp)
+                        Text("Resolver", fontSize = 18.sp)
                     }
                 }
 

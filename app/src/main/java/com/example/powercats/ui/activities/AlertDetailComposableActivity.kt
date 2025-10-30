@@ -1,10 +1,12 @@
 package com.example.powercats.ui.activities
 
+import AlertsViewModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,9 +35,13 @@ import com.example.powercats.ui.components.ButtonComponent
 import com.example.powercats.ui.components.ResolveAlertBottomSheet
 import com.example.powercats.ui.components.TopBar
 import com.example.powercats.ui.model.AlertUi
+import com.example.powercats.ui.model.EAlertStatus
 import com.example.powercats.ui.theme.PowerCATSTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AlertDetailComposableActivity : ComponentActivity() {
+    private val viewModel: AlertsViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val alertUi = intent.getSerializableExtra("alert") as AlertUi
@@ -46,8 +52,9 @@ class AlertDetailComposableActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                 ) { innerPadding ->
                     AlertDetailScreen(
-                        modifier = Modifier.padding(innerPadding),
+                        innerPadding = innerPadding,
                         alertUi = alertUi,
+                        viewModel = viewModel,
                     )
                 }
             }
@@ -57,8 +64,24 @@ class AlertDetailComposableActivity : ComponentActivity() {
 
 @Composable
 private fun AlertDetailScreen(
+    innerPadding: PaddingValues,
+    alertUi: AlertUi,
+    viewModel: AlertsViewModel,
+) {
+    AlertDetailScreen(
+        modifier = Modifier.padding(innerPadding),
+        alertUi = alertUi,
+        onResolveAlert = { viewModel.updateAlertStatus(alertUi.id, EAlertStatus.FULFILLED) },
+        onCancelAlert = { viewModel.updateAlertStatus(alertUi.id, EAlertStatus.CANCELLED) },
+    )
+}
+
+@Composable
+private fun AlertDetailScreen(
     modifier: Modifier = Modifier,
     alertUi: AlertUi,
+    onResolveAlert: () -> Unit,
+    onCancelAlert: () -> Unit,
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     Column(
@@ -87,11 +110,11 @@ private fun AlertDetailScreen(
             visible = showBottomSheet,
             onDismissRequest = { showBottomSheet = false },
             onConfirmation = {
-                showBottomSheet = false
+                onResolveAlert()
             },
             sheetTitle = "Resolver alerta?",
             sheetText = "Tem certeza que deseja resolver este alerta?",
-            onCancelAlert = {},
+            onCancelAlert = { onCancelAlert() },
         )
     }
 }
@@ -171,7 +194,10 @@ private fun AlertDetailScreenPreview() {
                         alertLevel = "Alto",
                         status = "Pendente",
                         description = "Dispositivo P21 - IFSC",
+                        id = 0,
                     ),
+                onResolveAlert = { },
+                onCancelAlert = { },
             )
         }
     }

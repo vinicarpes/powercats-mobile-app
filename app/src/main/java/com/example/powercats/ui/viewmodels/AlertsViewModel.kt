@@ -1,12 +1,13 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.powercats.ui.model.AlertUi
+import com.example.powercats.ui.model.EAlertStatus
 import com.example.powercats.usecases.AlertUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class AlertListingViewModel(
+class AlertsViewModel(
     private val useCase: AlertUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow<AlertsState>(AlertsState.Loading)
@@ -25,6 +26,15 @@ class AlertListingViewModel(
                     onSuccess = { AlertsState.Success(it) },
                     onFailure = { AlertsState.Error(it.message ?: "Erro desconhecido") },
                 )
+        }
+    }
+
+    fun updateAlertStatus(
+        id: Long,
+        status: EAlertStatus,
+    ) {
+        viewModelScope.launch {
+            useCase.updateAlertStatus(id, status)
         }
     }
 }

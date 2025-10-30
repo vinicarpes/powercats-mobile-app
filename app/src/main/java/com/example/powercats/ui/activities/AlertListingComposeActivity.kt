@@ -1,6 +1,6 @@
 package com.example.powercats.ui.activities
 
-import AlertListingViewModel
+import AlertsViewModel
 import AlertsState
 import android.content.Intent
 import android.os.Bundle
@@ -46,7 +46,7 @@ import java.io.Serializable
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AlertListingComposeActivity : ComponentActivity() {
-    private val viewModel: AlertListingViewModel by viewModel()
+    private val viewModel: AlertsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +70,7 @@ class AlertListingComposeActivity : ComponentActivity() {
 
 @Composable
 private fun AlertScreen(
-    viewModel: AlertListingViewModel,
+    viewModel: AlertsViewModel,
     modifier: Modifier,
 ) {
     val state = viewModel.state.collectAsState()
@@ -200,6 +200,7 @@ private fun AlertItemPreview() {
                 alertLevel = "Crítico",
                 status = "ativo",
                 description = "Dispositivo 1p2",
+                id = 0,
             ),
     )
 }
@@ -230,6 +231,7 @@ private fun sampleAlerts() =
             alertLevel = "Crítico",
             status = "Ativo",
             description = "Dispositivo 1p2",
+            id = 0,
         ),
         AlertUi(
             location = "Rua das Flores, 50 - Curitiba",
@@ -239,6 +241,7 @@ private fun sampleAlerts() =
             alertLevel = "Alto",
             status = "Pendente",
             description = "Dispositivo 1p2",
+            id = 0,
         ),
         AlertUi(
             location = "Av. Paulista, 1000 - São Paulo",
@@ -248,6 +251,7 @@ private fun sampleAlerts() =
             alertLevel = "Médio",
             status = "Resolvido",
             description = "Dispositivo 1p2",
+            id = 0,
         ),
         AlertUi(
             location = "Rua das Flores, 50 - Curitiba",
@@ -257,5 +261,6 @@ private fun sampleAlerts() =
             alertLevel = "Baixo",
             status = "Cancelado",
             description = "Dispositivo 1p2",
+            id = 0,
         ),
     )
