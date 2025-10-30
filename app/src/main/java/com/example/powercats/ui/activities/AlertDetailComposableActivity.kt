@@ -1,6 +1,8 @@
 package com.example.powercats.ui.activities
 
 import AlertsViewModel
+import AlertsViewModel.AlertsState
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,12 +20,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,7 +48,20 @@ class AlertDetailComposableActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val alertUi = intent.getSerializableExtra("alert") as AlertUi
+
+        val alert =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getSerializableExtra("alert", AlertUi::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                intent.getSerializableExtra("alert") as? AlertUi
+            }
+
+        if (alert == null) {
+            finish()
+            return
+        }
+
         setContent {
             PowerCATSTheme {
                 Scaffold(
@@ -53,8 +70,9 @@ class AlertDetailComposableActivity : ComponentActivity() {
                 ) { innerPadding ->
                     AlertDetailScreen(
                         innerPadding = innerPadding,
-                        alertUi = alertUi,
                         viewModel = viewModel,
+                        alert = alert,
+                        onClickClose = { finish() },
                     )
                 }
             }
@@ -65,14 +83,25 @@ class AlertDetailComposableActivity : ComponentActivity() {
 @Composable
 private fun AlertDetailScreen(
     innerPadding: PaddingValues,
-    alertUi: AlertUi,
     viewModel: AlertsViewModel,
+    alert: AlertUi,
+    onClickClose: () -> Unit = {},
 ) {
+    val state by viewModel.state.collectAsState()
+
+    val displayedAlert =
+        when (val currentState = state) {
+            is AlertsState.Success -> currentState.alerts.find { it.id == alert.id } ?: alert
+            else -> alert
+        }
+
     AlertDetailScreen(
         modifier = Modifier.padding(innerPadding),
-        alertUi = alertUi,
-        onResolveAlert = { viewModel.updateAlertStatus(alertUi.id, EAlertStatus.FULFILLED) },
-        onCancelAlert = { viewModel.updateAlertStatus(alertUi.id, EAlertStatus.CANCELLED) },
+        alertUi = displayedAlert,
+        onResolveAlert = { viewModel.updateAlertStatus(displayedAlert, EAlertStatus.FULFILLED) },
+        onCancelAlert = { viewModel.updateAlertStatus(displayedAlert, EAlertStatus.CANCELLED) },
+        state = state,
+        onClickClose = onClickClose,
     )
 }
 
@@ -82,8 +111,11 @@ private fun AlertDetailScreen(
     alertUi: AlertUi,
     onResolveAlert: () -> Unit,
     onCancelAlert: () -> Unit,
+    state: AlertsState,
+    onClickClose: () -> Unit = {},
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
+
     Column(
         modifier =
             modifier
@@ -99,7 +131,9 @@ private fun AlertDetailScreen(
             longitude = alertUi.longitude,
         )
         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            ButtonComponent(text = "Cancelar", isPrimaryButton = false, onClick = {})
+            ButtonComponent(text = "Voltar", isPrimaryButton = false, onClick = {
+                onClickClose()
+            })
             ButtonComponent(text = "Resolver", onClick = {
                 showBottomSheet = true
             })
@@ -111,10 +145,15 @@ private fun AlertDetailScreen(
             onDismissRequest = { showBottomSheet = false },
             onConfirmation = {
                 onResolveAlert()
+                showBottomSheet = false
             },
             sheetTitle = "Resolver alerta?",
             sheetText = "Tem certeza que deseja resolver este alerta?",
-            onCancelAlert = { onCancelAlert() },
+            onCancelAlert = {
+                onCancelAlert()
+                showBottomSheet = false
+            },
+            state = state,
         )
     }
 }
@@ -198,6 +237,7 @@ private fun AlertDetailScreenPreview() {
                     ),
                 onResolveAlert = { },
                 onCancelAlert = { },
+                state = AlertsState.Loading,
             )
         }
     }

@@ -1,7 +1,7 @@
 package com.example.powercats.ui.activities
 
 import AlertsViewModel
-import AlertsState
+import AlertsViewModel.AlertsState
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -42,8 +42,8 @@ import com.example.powercats.ui.components.AlertStatusTag
 import com.example.powercats.ui.components.TopBar
 import com.example.powercats.ui.model.AlertUi
 import com.example.powercats.ui.theme.PowerCATSTheme
-import java.io.Serializable
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.Serializable
 
 class AlertListingComposeActivity : ComponentActivity() {
     private val viewModel: AlertsViewModel by viewModel()
@@ -77,7 +77,10 @@ private fun AlertScreen(
 
     Box(modifier = modifier.fillMaxSize()) {
         val alerts = (state.value as? AlertsState.Success)?.alerts ?: emptyList()
-        AlertList(alerts = alerts, modifier = Modifier.fillMaxSize())
+        AlertList(
+            alerts = alerts,
+            modifier = Modifier.fillMaxSize(),
+        )
 
         if (state.value is AlertsState.Loading) {
             Box(
@@ -185,24 +188,6 @@ private fun AlertItem(
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun AlertItemPreview() {
-    AlertItem(
-        alertUi =
-            AlertUi(
-                location = "Rua Mauro Ramos, 500 - Florianópolis",
-                latitude = -26.00,
-                longitude = 40.00,
-                dateTime = "23/10/2025 14:04",
-                alertLevel = "Crítico",
-                status = "ativo",
-                description = "Dispositivo 1p2",
-                id = 0,
-            ),
-    )
 }
 
 @Preview

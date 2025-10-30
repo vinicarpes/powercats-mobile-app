@@ -30,23 +30,35 @@ class AlertsViewModel(
     }
 
     fun updateAlertStatus(
-        id: Long,
+        alertUi: AlertUi,
         status: EAlertStatus,
     ) {
         viewModelScope.launch {
-            useCase.updateAlertStatus(id, status)
+            val result = useCase.updateAlertStatus(alertUi.id, status)
+            result.fold(
+                onSuccess = {
+                    getAlerts()
+                },
+                onFailure = {
+                    _state.value = AlertsState.Error(it.message ?: "Erro ao atualizar")
+                },
+            )
         }
     }
-}
 
-sealed interface AlertsState {
-    object Loading : AlertsState
+    sealed interface AlertsState {
+        object Loading : AlertsState
 
-    data class Success(
-        val alerts: List<AlertUi>,
-    ) : AlertsState
+        data class Success(
+            val alerts: List<AlertUi>,
+        ) : AlertsState
 
-    data class Error(
-        val message: String,
-    ) : AlertsState
+        data class Error(
+            val message: String,
+        ) : AlertsState
+
+        data class Updated(
+            val alertUi: AlertUi,
+        ) : AlertsState
+    }
 }
