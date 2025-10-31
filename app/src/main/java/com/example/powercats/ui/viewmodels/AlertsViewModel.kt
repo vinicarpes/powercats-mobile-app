@@ -1,12 +1,13 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.powercats.ui.model.AlertUi
+import com.example.powercats.ui.model.EAlertStatus
 import com.example.powercats.usecases.AlertUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class AlertListingViewModel(
+class AlertsViewModel(
     private val useCase: AlertUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow<AlertsState>(AlertsState.Loading)
@@ -27,16 +28,37 @@ class AlertListingViewModel(
                 )
         }
     }
-}
 
-sealed interface AlertsState {
-    object Loading : AlertsState
+    fun updateAlertStatus(
+        alertUi: AlertUi,
+        status: EAlertStatus,
+    ) {
+        viewModelScope.launch {
+            val result = useCase.updateAlertStatus(alertUi.id, status)
+            result.fold(
+                onSuccess = {
+                    getAlerts()
+                },
+                onFailure = {
+                    _state.value = AlertsState.Error(it.message ?: "Erro ao atualizar")
+                },
+            )
+        }
+    }
 
-    data class Success(
-        val alerts: List<AlertUi>,
-    ) : AlertsState
+    sealed interface AlertsState {
+        object Loading : AlertsState
 
-    data class Error(
-        val message: String,
-    ) : AlertsState
+        data class Success(
+            val alerts: List<AlertUi>,
+        ) : AlertsState
+
+        data class Error(
+            val message: String,
+        ) : AlertsState
+
+        data class Updated(
+            val alertUi: AlertUi,
+        ) : AlertsState
+    }
 }

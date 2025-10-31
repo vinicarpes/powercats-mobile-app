@@ -10,7 +10,6 @@ import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.powercats.R
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -24,7 +23,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onCreate() {
         super.onCreate()
-        // Solicitar permissão de notificações em Android 13+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ActivityCompat.requestPermissions(
                 this as? android.app.Activity ?: return,
@@ -39,13 +37,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d(TAG, "onMessageReceived called")
         Log.d(TAG, "From: ${remoteMessage.from}")
 
-        // Notification payload
         remoteMessage.notification?.let {
             Log.d(TAG, "Notification payload - Title: ${it.title}, Body: ${it.body}")
             showNotification(it.title, it.body)
         }
 
-        // Data payload
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Data payload: ${remoteMessage.data}")
             val title = remoteMessage.data["title"]
@@ -58,7 +54,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onNewToken(token)
         Log.d(TAG, "Novo token FCM: $token")
 
-        // Inscrição no tópico "alerts"
         FirebaseMessaging
             .getInstance()
             .subscribeToTopic(TOPIC_ALERTS)
@@ -79,7 +74,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Criação do canal de notificação (Android 8+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
             notificationManager.getNotificationChannel(CHANNEL_ID) == null
         ) {
@@ -97,16 +91,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             Log.d(TAG, "Canal de notificação '$CHANNEL_ID' criado")
         }
 
-        // Criando NotificationCompat.Builder
         val builder =
             NotificationCompat
                 .Builder(this, CHANNEL_ID)
                 .setContentTitle(title ?: "Novo alerta")
                 .setContentText(message ?: "")
-                .setSmallIcon(android.R.drawable.ic_dialog_info) // ícone padrão do Android
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setAutoCancel(true)
 
-        // Apenas Android < Oreo precisa de prioridade explícita
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             builder.priority = NotificationCompat.PRIORITY_HIGH
         }

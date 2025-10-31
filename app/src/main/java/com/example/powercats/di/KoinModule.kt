@@ -1,6 +1,6 @@
 package com.example.powercats.di
 
-import AlertListingViewModel
+import AlertsViewModel
 import com.example.listaelementos.retrofit.provideOkHttpClient
 import com.example.listaelementos.retrofit.provideRetrofit
 import com.example.powercats.repositories.AlertRepository
@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 
 val appModule =
     module {
-        viewModel { AlertListingViewModel(get()) }
+        viewModel { AlertsViewModel(get()) }
     }
 
 val networkModule =

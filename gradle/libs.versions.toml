@@ -10,12 +10,18 @@ lifecycleRuntimeKtx = "2.6.1"
 activityCompose = "1.8.0"
 composeBom = "2024.09.00"
 appcompat = "1.7.1"
-koinBom = "4.1.1-Beta1"
+koinBom = "4.1.1"
+mapsCompose = "6.12.1"
+mapsComposeUtils = "6.12.1"
+mapsComposeVersion = "4.3.0"
+mapsComposeWidgets = "6.12.1"
 okhttp = "4.12.0"
+playServicesMaps = "19.2.0"
 retrofit = "2.9.0"
 loggingInterceptor = "4.12.0"
 firebaseMessaging = "25.0.1"
 firebaseInappmessagingDisplay = "22.0.1"
+playServicesLocation = "21.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -43,12 +49,15 @@ koin-core = { module = "io.insert-koin:koin-core" }
 koin-test = { module = "io.insert-koin:koin-test" }
 koin-test-junit4 = { module = "io.insert-koin:koin-test-junit4" }
 insert-koin-koin-core = { module = "io.insert-koin:koin-core" }
+maps-compose-v430 = { module = "com.google.maps.android:maps-compose", version.ref = "mapsComposeVersion" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
+play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 firebase-inappmessaging-display = { group = "com.google.firebase", name = "firebase-inappmessaging-display", version.ref = "firebaseInappmessagingDisplay" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 
 [plugins]
