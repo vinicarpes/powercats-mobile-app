@@ -49,8 +49,8 @@ fun TopBar(
                         Brush.verticalGradient(
                             colors =
                                 listOf(
-                                    Color(0xFFFFA726), // Laranja mais claro no topo
-                                    Color(0xFFFF8F00), // Laranja mais forte embaixo
+                                    Color(0xFFFFA726),
+                                    Color(0xFFFF8F00),
                                 ),
                         ),
                 ),
@@ -77,7 +77,6 @@ private fun TopBarContent(userName: String) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        // Lado esquerdo: texto de boas-vindas
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start,
@@ -107,9 +106,8 @@ private fun TopBarContent(userName: String) {
             )
         }
 
-        // Lado direito: logo / ícone
         Icon(
-            painter = painterResource(id = R.drawable.ic_launcher_foreground), // substitua pelo logo real
+            painter = painterResource(id = R.drawable.ic_launcher_foreground),
             contentDescription = "Logo PowerCATS",
             tint = Color.White,
             modifier =
