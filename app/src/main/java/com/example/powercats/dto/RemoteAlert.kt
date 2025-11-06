@@ -1,6 +1,7 @@
 package com.example.powercats.dto
 
 import com.example.powercats.ui.model.AlertUi
+import java.io.Serializable
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -13,7 +14,7 @@ data class RemoteAlert(
     val description: String,
     val latitude: Double = 0.0,
     val longitude: Double = 0.0,
-)
+) : Serializable
 
 fun RemoteAlert.toAlertUi(): AlertUi =
     AlertUi(
