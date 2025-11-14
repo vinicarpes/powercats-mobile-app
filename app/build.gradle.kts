@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -21,16 +23,13 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val mapsApiKey: String =
-            (project.findProperty("MAPS_API_KEY") as? String)
-                ?: System.getenv("MAPS_API_KEY")
-                ?: ""
-
-        if (mapsApiKey.isEmpty()) {
-            logger.warn("⚠️ MAPS_API_KEY está vazia. Verifique local.properties ou variáveis de ambiente.")
+        val properties = Properties()
+        file("../local.properties").inputStream().use {
+            properties.load(it)
         }
 
-        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
+        val apiKey = properties.getProperty("MAPS_API_KEY")
+        manifestPlaceholders["MAPS_API_KEY"] = apiKey
     }
 
     buildTypes {

@@ -33,7 +33,6 @@ import androidx.core.app.ActivityCompat
 import com.example.powercats.R.drawable.device_map
 import com.example.powercats.R.drawable.notifications
 import com.example.powercats.R.drawable.sensors_register
-import com.example.powercats.R.drawable.user_register
 import com.example.powercats.ui.components.TopBar
 import com.example.powercats.ui.navigation.Destination
 import com.example.powercats.ui.navigation.navigateTo
@@ -104,17 +103,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 onClick = { navigateTo(context, Destination.Map) },
             )
 
-            OptionCard(
-                text = "Cadastro de Usuários",
-                painter = painterResource(user_register),
-                onClick = { navigateTo(context, Destination.Users) },
-            )
-        }
-
-        Row(
-            modifier = rowModifier,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
             OptionCard(
                 text = "Relatório de Alertas",
                 painter = painterResource(sensors_register),
